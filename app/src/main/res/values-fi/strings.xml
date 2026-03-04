@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mobiiliohjelmointi</string>
+    <string name="sportapp">Urheilusovellus</string>
+    <string name="personal_info">Omat tiedot</string>
+    <string name="swimming">Uinti</string>
+    <string name="running">Juoksu</string>
+    <string name="cycling">Pyöräily</string>
+    <string name="gym">Sali</string>
+    <string name="skiing">Hiihto</string>
+    <string name="dancing">Tanssi</string>
+</resources>
