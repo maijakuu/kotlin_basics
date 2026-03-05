@@ -1,4 +1,4 @@
-# Mobile Programming Exercises
+# Kotlin basics
 
 ## 1.1 Teht1
 - Make two buttons at the same horizontal level.
