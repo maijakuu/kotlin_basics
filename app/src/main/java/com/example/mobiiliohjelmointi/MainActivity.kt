@@ -74,11 +74,11 @@ fun MobiiliohjelmointiApp() {
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
-                val items = listOf("Home", "Tehtävä 1.1", "Tehtävä 1.2", "Tehtävä 1.3", "Tehtävä 1.4",
+                val items = listOf(/*"Home", "Tehtävä 1.1", "Tehtävä 1.2",*/ "Tehtävä 1.3", "Tehtävä 1.4",
                     "Tehtävä 2.1", "Tehtävä 2.2", "Tehtävä 2.3", "Tehtävä 2.4", "Tehtävä 2.5", "Tehtävä 2.6",
-                    "Tehtävä 3.1", "Tehtävä 3.2", "Tehtävä 3.3")
+                    "Tehtävä 3.1", "Tehtävä 3.2", "Tehtävä 3.3", "nakki1", "nakki2", "nakki3" )
 
-                Text("TEHTÄVÄT", modifier = Modifier.padding(16.dp), style = MaterialTheme.typography.titleMedium)
+                Text("TEHTÄVÄT", modifier = Modifier.padding(5.dp), style = MaterialTheme.typography.titleSmall)
                 items.forEach { item ->
                     NavigationDrawerItem(
                         label = { Text(item) },
@@ -112,12 +112,12 @@ fun MobiiliohjelmointiApp() {
             NavHost(
                 //modifier = Modifier.padding(padding),
                 navController = navController,
-                startDestination = "Tehtävä 3.1",
+                startDestination = "Tehtävä 3.2",
 
             ) {
-                composable("Home") { Home() }
-                composable("Tehtävä 1.1") { Teht1() }
-                composable("Tehtävä 1.2") { Teht2() }
+                /*composable("Home") { Home() }*/
+                //composable("Tehtävä 1.1") { Teht1() }
+                //composable("Tehtävä 1.2") { Teht2() }
                 composable("Tehtävä 1.3") { Teht3() }
                 composable("Tehtävä 1.4") { Teht4() }
                 composable("Tehtävä 2.1") { Teht5() }
@@ -128,10 +128,13 @@ fun MobiiliohjelmointiApp() {
                 composable("Tehtävä 2.6") { Teht10()}
                 composable("Tehtävä 3.1") { Teht11(navController) }
                 composable("yhteenveto") { yhteenveto(navController) }
-                composable("Tehtävä 3.2") { Teht12()}
-                composable("Tehtävä 3.3") { Teht13()}
+                composable("Tehtävä 3.2") { Teht12a()}
+                composable("nakki1") { Teht12b()}
+                composable("nakki2") { Teht12c()}
+                composable("nakki3") { Teht12d()}
 
             }
         }
     }
 }
+
