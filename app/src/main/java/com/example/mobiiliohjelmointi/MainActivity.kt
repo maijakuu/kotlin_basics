@@ -126,9 +126,11 @@ fun MobiiliohjelmointiApp() {
                 composable("Tehtävä 2.4") { Teht8() }
                 composable("Tehtävä 2.5") { Teht9() }
                 composable("Tehtävä 2.6") { Teht10()}
-                composable("Tehtävä 3.1") { Teht11()}
+                composable("Tehtävä 3.1") { Teht11(navController) }
+                composable("yhteenveto") { yhteenveto(navController) }
                 composable("Tehtävä 3.2") { Teht12()}
                 composable("Tehtävä 3.3") { Teht13()}
+
             }
         }
     }
