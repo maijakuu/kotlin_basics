@@ -48,7 +48,8 @@
 - The app stores the inputs to a separate list, which you can access via navigation.
 
 ## 2.8 Teht12
-- Not done yet.
+- Make an app for counting received income from mileage compensation and daily allowance depending on the kilometers and days traveled. The app should have navigational components between screens.
 
 ## 2.9 Teht13
 - Not done yet.
+  
