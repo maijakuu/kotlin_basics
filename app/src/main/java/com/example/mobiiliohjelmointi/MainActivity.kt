@@ -45,10 +45,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 class MainActivity : ComponentActivity() {
@@ -109,29 +111,32 @@ fun MobiiliohjelmointiApp() {
                 )
             }
         ) { padding ->
+
+            val vm: kululaskuriViewModel = viewModel()
             NavHost(
                 //modifier = Modifier.padding(padding),
                 navController = navController,
-                startDestination = "Tehtävä 3.2",
+                startDestination = "Tehtävä 3.2",)
+                {
+                    composable("Home") { Home() }
+                    composable("Tehtävä 1.1") { Teht1() }
+                    composable("Tehtävä 1.2") { Teht2() }
+                    composable("Tehtävä 1.3") { Teht3() }
+                    composable("Tehtävä 1.4") { Teht4() }
+                    composable("Tehtävä 2.1") { Teht5() }
+                    composable("Tehtävä 2.2") { Teht6() }
+                    composable("Tehtävä 2.3") { Teht7() }
+                    composable("Tehtävä 2.4") { Teht8() }
+                    composable("Tehtävä 2.5") { Teht9() }
+                    composable("Tehtävä 2.6") { Teht10()}
+                    composable("Tehtävä 3.1") { Teht11(navController) }
+                    composable("yhteenveto") { yhteenveto(navController) }
+                    composable("Tehtävä 3.2") { Teht12a(navController) }
+                    composable("Teht12b")     { Teht12b(navController, vm) }
+                    composable("Teht12c")     { Teht12c(navController, vm) }
+                    composable("Teht12d")     { Teht12d(navController, vm) }
 
-            ) {
-                /*composable("Home") { Home() }*/
-                //composable("Tehtävä 1.1") { Teht1() }
-                //composable("Tehtävä 1.2") { Teht2() }
-                composable("Tehtävä 1.3") { Teht3() }
-                composable("Tehtävä 1.4") { Teht4() }
-                composable("Tehtävä 2.1") { Teht5() }
-                composable("Tehtävä 2.2") { Teht6() }
-                composable("Tehtävä 2.3") { Teht7() }
-                composable("Tehtävä 2.4") { Teht8() }
-                composable("Tehtävä 2.5") { Teht9() }
-                composable("Tehtävä 2.6") { Teht10()}
-                composable("Tehtävä 3.1") { Teht11(navController) }
-                composable("yhteenveto") { yhteenveto(navController) }
-                composable("Tehtävä 3.2") { Teht12a(navController)}
-
-
-            }
+                }
         }
     }
 }
