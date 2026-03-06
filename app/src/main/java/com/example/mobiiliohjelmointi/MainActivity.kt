@@ -25,7 +25,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.remember
@@ -48,9 +50,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
-import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 class MainActivity : ComponentActivity() {
@@ -61,9 +63,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
-
 //YLÄKULMAN MENU
 @Composable
 fun MobiiliohjelmointiApp() {
@@ -78,7 +78,7 @@ fun MobiiliohjelmointiApp() {
             ModalDrawerSheet {
                 val items = listOf(/*"Home", "Tehtävä 1.1", "Tehtävä 1.2",*/ "Tehtävä 1.3", "Tehtävä 1.4",
                     "Tehtävä 2.1", "Tehtävä 2.2", "Tehtävä 2.3", "Tehtävä 2.4", "Tehtävä 2.5", "Tehtävä 2.6",
-                    "Tehtävä 3.1", "Tehtävä 3.2")
+                    "Tehtävä 3.1", "Tehtävä 3.2", "Tehtävä 3.3" )
 
                 Text("TEHTÄVÄT", modifier = Modifier.padding(5.dp), style = MaterialTheme.typography.titleSmall)
                 items.forEach { item ->
@@ -94,11 +94,14 @@ fun MobiiliohjelmointiApp() {
                 }
             }
         }
-    ) {
+    )
+    {
+        val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+
         Scaffold(
             topBar = {
                 TopAppBar(
-                    modifier= Modifier.background(Transparent),
+                    modifier = Modifier.background(Transparent),
                     title = { Text("Mobiiliohjelmointi") },
                     navigationIcon = {
                         IconButton(onClick = { scope.launch { drawerState.open() } }) {
@@ -107,16 +110,50 @@ fun MobiiliohjelmointiApp() {
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color.Transparent
-                 )
+                    )
                 )
+            },
+            bottomBar = {
+                val showBottomBar = currentRoute in listOf("Tehtävä 3.3", "saannot", "tekija")
+                if (showBottomBar) {
+                    BottomAppBar {
+                        NavigationBarItem(
+                            selected = currentRoute == "tekija",
+                            onClick = {
+                                navController.navigate("tekija")
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = Icons.Default.Info,
+                                    contentDescription = "Tekijä"
+                                )
+                            }
+                        )
+                        NavigationBarItem(
+                            selected = currentRoute == "saannot",
+                            onClick = {
+                                navController.navigate("saannot")
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = Icons.Default.Search,
+                                    contentDescription = "Säännöt"
+                                )
+                            }
+                        )
+                    }
+                }
             }
-        ) { padding ->
+        )
+
+        { padding ->
 
             val vm: kululaskuriViewModel = viewModel()
+            val vm1: tulosViewModel = viewModel()
             NavHost(
                 //modifier = Modifier.padding(padding),
                 navController = navController,
-                startDestination = "Tehtävä 3.2",)
+                startDestination = "Tehtävä 3.3",)
                 {
                     composable("Home") { Home() }
                     composable("Tehtävä 1.1") { Teht1() }
@@ -135,9 +172,16 @@ fun MobiiliohjelmointiApp() {
                     composable("Teht12b")     { Teht12b(navController, vm) }
                     composable("Teht12c")     { Teht12c(navController, vm) }
                     composable("Teht12d")     { Teht12d(navController, vm) }
-
+                    composable("Tehtävä 3.3") { Teht13a(navController) }
+                    composable("Teht13b")     { Teht13b(navController, vm1) }
+                    composable("Teht13c")     { Teht13c(navController, vm1) }
+                    composable("Teht13d")     { Teht13d(navController, vm1) }
+                    composable("saannot") {saannot(navController)}
+                    composable("tekija")  {tekija(navController)}
+                    }
                 }
         }
     }
-}
+
+
 
