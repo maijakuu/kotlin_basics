@@ -41,13 +41,8 @@ import androidx.navigation.NavHostController
 fun Teht12a(navController: NavHostController) {
     var expanded by remember { mutableStateOf(false) }
     var selectedItem by remember { mutableStateOf("Valitse kulut") }
-
     val menuItems = listOf("Päivärahat", "Matkakulut")
-    var paivat by remember { mutableIntStateOf(0)}
-    var korvaus by remember { mutableFloatStateOf(0f)}
-    var matka by remember { mutableFloatStateOf(0f)}
-    var paivarahatot by remember { mutableFloatStateOf(0f) }
-    var kmtot by remember { mutableFloatStateOf(0f) }
+
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -61,7 +56,6 @@ fun Teht12a(navController: NavHostController) {
                 textAlign = TextAlign.Center,
                 fontSize = 40.sp
             )
-
         }
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -100,9 +94,6 @@ fun Teht12a(navController: NavHostController) {
         Row() {
             Button(
                 onClick = {
-                    navController.currentBackStackEntry?.savedStateHandle?.set("paivat", paivat)
-                    navController.currentBackStackEntry?.savedStateHandle?.set("korvaus", korvaus)
-
                     if (selectedItem == "Päivärahat")
                         { navController.navigate("Teht12b") }
                     else if (selectedItem == "Matkakulut")
@@ -124,8 +115,6 @@ fun Teht12a(navController: NavHostController) {
         Row() {
             Button(
                 onClick = {
-                    navController.currentBackStackEntry?.savedStateHandle?.set("paivat", paivat)
-                    navController.currentBackStackEntry?.savedStateHandle?.set("korvaus", korvaus)
                     navController.navigate("Teht12d")
                 },
                 modifier = Modifier
@@ -148,6 +137,7 @@ fun Teht12b(navController: NavHostController)
 {
     var paivat by remember { mutableStateOf("")}
     var korvaus by remember { mutableStateOf("")}
+
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -180,9 +170,13 @@ fun Teht12b(navController: NavHostController)
         ) {
             Row() {
                 Button(onClick ={
-                    navController.currentBackStackEntry?.savedStateHandle?.set("paivat", paivat)
-                    navController.currentBackStackEntry?.savedStateHandle?.set("korvaus", korvaus)
-                    navController.navigate("Teht12a")
+                    val parentEntry = navController.getBackStackEntry("Teht12a")
+                    val parentState = parentEntry.savedStateHandle
+
+                    parentState["paivat"] = paivat
+                    parentState["korvaus"] = korvaus
+
+                    navController.popBackStack()
                 },
                     modifier = Modifier
                         .padding(20.dp),
@@ -197,7 +191,6 @@ fun Teht12b(navController: NavHostController)
                             .padding(5.dp)
                     )
                 }
-
             }
         }
     }
@@ -223,7 +216,7 @@ fun Teht12c(navController: NavHostController)
             modifier = Modifier.background(Color.LightGray),
             value = kilometrit,
             onValueChange = { kilometrit = it },
-            label = { Text("Kilometrit") }
+            label = { Text("kilometrit") }
         )
 
         Column(
@@ -232,8 +225,12 @@ fun Teht12c(navController: NavHostController)
         ) {
             Row() {
                 Button(onClick ={
-                    navController.currentBackStackEntry?.savedStateHandle?.set("Kilometrit", kilometrit)
-                    navController.navigate("Teht12a")
+                    val parentEntry = navController.getBackStackEntry("Teht12a")
+                    val parentState = parentEntry.savedStateHandle
+
+                    parentState["kilometrit"] = kilometrit
+
+                    navController.popBackStack()
                 },
                     modifier = Modifier
                         .padding(20.dp),
@@ -254,6 +251,19 @@ fun Teht12c(navController: NavHostController)
 }
 @Composable
 fun Teht12d(navController: NavHostController) {
+    //Haetaan aikaisemmin saadut arvot
+    val currentEntry = navController.currentBackStackEntry
+    val parentEntry = remember(currentEntry) {navController.getBackStackEntry("Teht12a")}
+    val savedState = parentEntry.savedStateHandle
+
+    val paivat = savedState.get<String>("paivat") ?: "0"
+    val korvaus = savedState.get<String>("korvaus") ?: "0"
+    val kilometrit = savedState.get<String>("kilometrit") ?: "0"
+
+    val paivarahat = (paivat.toFloatOrNull() ?: 0f) * (korvaus.toFloatOrNull() ?: 0f)
+    val kilometrikorvaus = (kilometrit.toFloatOrNull() ?: 0f) * 0.5f
+    val yhteensa = paivarahat + kilometrikorvaus
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -269,28 +279,57 @@ fun Teht12d(navController: NavHostController) {
                 .background(Color.LightGray)
                 .padding(10.dp)
         ) {
-            Text(text = "Päivärahat: '$'", fontSize = 24.sp) // add score inside if needed
+            Text(text = "Päivärahat: $paivarahat €", fontSize = 24.sp) // add score inside if needed
         }
         Box(
             modifier = Modifier
                 .background(Color.LightGray)
                 .padding(10.dp)
         ) {
-            Text(text = "Kilometrit: '$'", fontSize = 24.sp) // add score inside if needed
+            Text(text = "Kilometrikorvaukset: $kilometrikorvaus €", fontSize = 24.sp) // add score inside if needed
         }
         Box(
             modifier = Modifier
-                .background(Color.Yellow)
+                .background(Color.Green)
                 .padding(10.dp)
         ) {
-            Text(text = "Yhteensä: '$'", fontSize = 24.sp) // add score inside if needed
+            Text(text = "Yhteensä: $yhteensa €", fontSize = 24.sp) // add score inside if needed
         }
-        Button(onClick = { }) {
-            Text("Jatka")
-        }
-        Button(onClick = {}) {
-            Text("Aloita alusta")
-        }
+
+        Button(onClick = {navController.navigate("Teht12a")
+        },
+            modifier = Modifier
+                .padding(20.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow))
+                {
+                    Text(
+                        text = "Jatka",
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center,
+                        color = Color.Black,
+                        modifier = Modifier
+                            .padding(5.dp)
+                    )
+                }
+        Button(onClick = {
+            //Nollataan arvot
+            savedState?.set("paivat", "")
+            savedState?.set("korvaus", "")
+            savedState?.set("kilometrit", "")
+            navController.navigate("Teht12a")},
+            modifier = Modifier
+                .padding(20.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow))
+                {
+                    Text(
+                        text = "Aloita alusta",
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center,
+                        color = Color.Black,
+                        modifier = Modifier
+                            .padding(5.dp)
+                    )
+                }
 
     }
 }
