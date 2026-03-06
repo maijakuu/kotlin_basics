@@ -76,7 +76,7 @@ fun MobiiliohjelmointiApp() {
             ModalDrawerSheet {
                 val items = listOf(/*"Home", "Tehtävä 1.1", "Tehtävä 1.2",*/ "Tehtävä 1.3", "Tehtävä 1.4",
                     "Tehtävä 2.1", "Tehtävä 2.2", "Tehtävä 2.3", "Tehtävä 2.4", "Tehtävä 2.5", "Tehtävä 2.6",
-                    "Tehtävä 3.1", "Tehtävä 3.2", "Teht12a", "Teht12b", "Teht12c", "Yhteensa" )
+                    "Tehtävä 3.1", "Tehtävä 3.2")
 
                 Text("TEHTÄVÄT", modifier = Modifier.padding(5.dp), style = MaterialTheme.typography.titleSmall)
                 items.forEach { item ->
@@ -112,7 +112,7 @@ fun MobiiliohjelmointiApp() {
             NavHost(
                 //modifier = Modifier.padding(padding),
                 navController = navController,
-                startDestination = "Teht12a",
+                startDestination = "Tehtävä 3.2",
 
             ) {
                 /*composable("Home") { Home() }*/
@@ -128,10 +128,8 @@ fun MobiiliohjelmointiApp() {
                 composable("Tehtävä 2.6") { Teht10()}
                 composable("Tehtävä 3.1") { Teht11(navController) }
                 composable("yhteenveto") { yhteenveto(navController) }
-                composable("Teht12a") { Teht12a(navController)}
-                composable("Teht12b") { Teht12b(navController)}
-                composable("Teht12c") { Teht12c(navController)}
-                composable("Teht12d") { Teht12d(navController)}
+                composable("Tehtävä 3.2") { Teht12a(navController)}
+
 
             }
         }
