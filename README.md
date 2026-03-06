@@ -51,5 +51,5 @@
 - Make an app for counting received income from mileage compensation and daily allowance depending on the kilometers and days traveled. The app should have navigational components between screens.
 
 ## 2.9 Teht13
-- Not done yet.
+- Make an  app for minus and plus calculations. There should be navigational components between different screens. Include a bottombar in this one with the possibility to navigate back. 
   
