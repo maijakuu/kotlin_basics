@@ -53,7 +53,8 @@ class tulosViewModel : ViewModel()
 {
     var ptulos by mutableIntStateOf(0)
     var mtulos by mutableIntStateOf(0)
-    var rounds by mutableIntStateOf(0)
+    var prounds by mutableIntStateOf(0)
+    var mrounds by mutableIntStateOf(0)
 }
     @Composable
     fun Teht13a(navController: NavHostController) //Navcontroller ja navhost controller oltava navigoitaessa
@@ -166,7 +167,7 @@ fun Teht13b(navController: NavHostController, vm1: tulosViewModel) { //PLUSLASKU
                 val numguess = userinput.toIntOrNull()
                 if (numguess == numA + numB) {
                     vm1.ptulos++}
-                    vm1.rounds++
+                    vm1.prounds++
                     numA = (1..10).random()
                     numB = (1..10).random()
                     userinput = ""
@@ -250,8 +251,8 @@ fun Teht13b(navController: NavHostController, vm1: tulosViewModel) { //PLUSLASKU
                 verticalAlignment = Alignment.CenterVertically
             )
             {
-                if (vm1.rounds < 10)
-                    Text(text = "Exercise: ${vm1.rounds + 1}/10")
+                if (vm1.prounds < 10)
+                    Text(text = "Exercise: ${vm1.prounds + 1}/10")
                 else {
                     Text(text = "")
                 }
@@ -259,7 +260,7 @@ fun Teht13b(navController: NavHostController, vm1: tulosViewModel) { //PLUSLASKU
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            if (vm1.rounds < 10) {                                       //TULOSLASKENTA
+            if (vm1.prounds < 10) {                                       //TULOSLASKENTA
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
@@ -295,7 +296,7 @@ fun Teht13c(navController: NavHostController, vm1: tulosViewModel) {
             if (numguess == numA - numB) {
                 vm1.mtulos++
             }
-            vm1.rounds++
+            vm1.mrounds++
             numA = (1..10).random()
             numB = (1..10).random()
             userinput = ""
@@ -379,8 +380,8 @@ fun Teht13c(navController: NavHostController, vm1: tulosViewModel) {
                 verticalAlignment = Alignment.CenterVertically
             )
                 {
-                    if (vm1.rounds < 10)
-                        Text(text = "Exercise: ${vm1.rounds + 1}/10")
+                    if (vm1.mrounds < 10)
+                        Text(text = "Exercise: ${vm1.mrounds + 1}/10")
                     else {
                         Text(text = "")
                     }
@@ -388,7 +389,7 @@ fun Teht13c(navController: NavHostController, vm1: tulosViewModel) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-                if (vm1.rounds < 10) {                                       //TULOSLASKENTA
+                if (vm1.mrounds < 10) {                                       //TULOSLASKENTA
                     Row(
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
@@ -417,9 +418,12 @@ fun Teht13c(navController: NavHostController, vm1: tulosViewModel) {
 @Composable
 fun Teht13d(navController: NavHostController, vm1: tulosViewModel) {
 
+    val previousRoute = navController.previousBackStackEntry?.destination?.route
     val resetbutton: () -> Unit = {
         vm1.mtulos = 0
         vm1.ptulos = 0
+        vm1.mrounds = 0
+        vm1.prounds = 0
         navController.navigate("Tehtävä 3.3") {  //Palataan takaisin 13a
             popUpTo("Tehtävä 3.3")               //Poista kaikki backstackista
             {
@@ -437,7 +441,7 @@ fun Teht13d(navController: NavHostController, vm1: tulosViewModel) {
     ) {
         Text(text = "Laskujen tulokset:", fontSize = 40.sp)
 
-        if (vm1.ptulos == 0 && vm1.mtulos == 0 && vm1.rounds == 0) //Ei tuloksia, näytetään viesti
+        if (vm1.ptulos == 0 && vm1.mtulos == 0 && vm1.mrounds == 0 && vm1.prounds == 0) //Ei tuloksia, näytetään viesti
         {
             Text(
                 text = "Ei näytettäviä tuloksia, menehän laskemaan!",
@@ -445,7 +449,7 @@ fun Teht13d(navController: NavHostController, vm1: tulosViewModel) {
                 textAlign = TextAlign.Center
             )
         }
-        if (vm1.ptulos > 0) //Näytetään vain jos pluslaskuja on tehty
+        if (previousRoute == "Teht13b") //Näytetään vain jos pluslaskuja on tehty
         {
             Text(
                 text = "Pluslaskut: ${vm1.ptulos.toInt()} pistettä",
@@ -453,7 +457,7 @@ fun Teht13d(navController: NavHostController, vm1: tulosViewModel) {
                 textAlign = TextAlign.Center
             )
         }
-        if (vm1.mtulos > 0) //Näytetään vain jos miinuslaskuja on tehty
+        if (previousRoute == "Teht13c") //Näytetään vain jos miinuslaskuja on tehty
         {
             Text(
                 text = "Miinuslaskut: ${vm1.mtulos.toInt()} pistettä",
@@ -461,32 +465,23 @@ fun Teht13d(navController: NavHostController, vm1: tulosViewModel) {
                 textAlign = TextAlign.Center
             )
         }
-        if (vm1.ptulos == 0 && vm1.mtulos == 0 && vm1.rounds == 10) {
-            Text(
-                text = "Voi ei, et saanut yhtään oikein :( ",
-                fontSize = 24.sp,
-                textAlign = TextAlign.Center
-            )
-        }
-
-        Button(
-            onClick = resetbutton,                //LAMBDA
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB5A9FF))
-        ) {
-            Text(
-                text = "Aloita alusta",
-                fontSize = 20.sp,
-                textAlign = TextAlign.Center,
-                color = Color.Black,
-                modifier = Modifier.padding(5.dp)
-            )
+            Button(
+                onClick = resetbutton,                //LAMBDA
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB5A9FF))
+            ) {
+                Text(
+                    text = "Aloita alusta",
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center,
+                    color = Color.Black,
+                    modifier = Modifier.padding(5.dp)
+                )
+            }
         }
     }
-}
 
 @Composable
-fun saannot(navController: NavHostController)
-{
+fun saannot(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -518,8 +513,7 @@ fun saannot(navController: NavHostController)
 }
 
 @Composable
-fun tekija(navController: NavHostController)
-{
+fun tekija(navController: NavHostController) {
     val context = LocalContext.current
     Column(
         modifier = Modifier
@@ -558,6 +552,7 @@ fun tekija(navController: NavHostController)
         )
     }
 }
+
 
 
 

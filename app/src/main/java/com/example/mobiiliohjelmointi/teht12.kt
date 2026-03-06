@@ -294,11 +294,6 @@ fun Teht12d(navController: NavHostController, vm: kululaskuriViewModel) {
 
         Text(text = "Yhteenveto kuluista", fontSize = 40.sp)
 
-        Box(
-            modifier = Modifier
-                .background(Color.LightGray)
-                .padding(10.dp)
-        ) {
             Text(text = "Päivärahat: $paivarahat €", fontSize = 24.sp)
             Box(
                 modifier = Modifier
@@ -359,4 +354,3 @@ fun Teht12d(navController: NavHostController, vm: kululaskuriViewModel) {
             }
         }
     }
-}
