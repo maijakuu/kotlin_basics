@@ -95,7 +95,8 @@ class tulosViewModel : ViewModel()
                 )
 
                 DropdownMenu(
-                    modifier = Modifier.width(200.dp),
+                    modifier = Modifier
+                        .width(200.dp),
                     expanded = expanded,
                     onDismissRequest = { expanded = false }
                 ) {
@@ -110,6 +111,9 @@ class tulosViewModel : ViewModel()
                     }
                 }
             }
+
+            Spacer(modifier = Modifier.height(30.dp))
+
             Row() {
                 Button(
                     onClick = {
@@ -120,7 +124,7 @@ class tulosViewModel : ViewModel()
                     },
                     modifier = Modifier
                         .padding(5.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Green)
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB5A9FF))
                 )
                 {
                     Text(
@@ -137,7 +141,7 @@ class tulosViewModel : ViewModel()
                     },
                     modifier = Modifier
                         .padding(5.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow)
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB5A9FF))
                 )
                 {
                     Text(
@@ -203,7 +207,7 @@ fun Teht13b(navController: NavHostController, vm1: tulosViewModel) { //PLUSLASKU
 
                 Box(
                     modifier = Modifier
-                        .background(Color.Green)
+                        .background(Color(0xFFB5A9FF))
                         .padding(10.dp)
                 )
 
@@ -217,7 +221,7 @@ fun Teht13b(navController: NavHostController, vm1: tulosViewModel) { //PLUSLASKU
 
                 Box(
                     modifier = Modifier
-                        .background(Color.Green)
+                        .background(Color(0xFFB5A9FF))
                         .padding(10.dp)
                 )
 
@@ -332,7 +336,7 @@ fun Teht13c(navController: NavHostController, vm1: tulosViewModel) {
 
                 Box(
                     modifier = Modifier
-                        .background(Color.Green)
+                        .background(Color(0xFFB5A9FF))
                         .padding(10.dp)
                 )
 
@@ -346,7 +350,7 @@ fun Teht13c(navController: NavHostController, vm1: tulosViewModel) {
 
                 Box(
                     modifier = Modifier
-                        .background(Color.Green)
+                        .background(Color(0xFFB5A9FF))
                         .padding(10.dp)
                 )
 
@@ -381,6 +385,8 @@ fun Teht13c(navController: NavHostController, vm1: tulosViewModel) {
                         Text(text = "")
                     }
                 }
+
+            Spacer(modifier = Modifier.height(20.dp))
 
                 if (vm1.rounds < 10) {                                       //TULOSLASKENTA
                     Row(
@@ -465,7 +471,7 @@ fun Teht13d(navController: NavHostController, vm1: tulosViewModel) {
 
         Button(
             onClick = resetbutton,                //LAMBDA
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow)
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB5A9FF))
         ) {
             Text(
                 text = "Aloita alusta",

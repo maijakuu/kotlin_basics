@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
@@ -38,19 +39,13 @@ fun Home()
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        Image(
-            painter = painterResource(R.drawable.home2),
-            contentDescription = null,
-            modifier = Modifier.matchParentSize(),
-            contentScale = ContentScale.Crop
-        )
         Box(
             modifier = Modifier
                 .matchParentSize()
                 .background(
                     Brush.verticalGradient(
-                        colors = listOf(Color.Transparent, Color.White, Color(0xCCCB8FFA)),
-                        startY = 0.0f,
+                        colors = listOf(Color.Black, Color(0xFFB5A9FF), Color.White),
+                        startY = 800f,
                         endY = 2400f
                     )
                 )
@@ -63,24 +58,35 @@ fun Home()
             verticalArrangement = Arrangement.Center,
 
             ) {
-            Text(
-                text = "KOTLIN PERUSTEET",
-                style = MaterialTheme.typography.titleLarge,
-                lineHeight = 30.sp,
-                textAlign = TextAlign.Center,
-                color = Color.Black,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
+            Image(
+                painter = painterResource(id = R.drawable.kotlinperusteet),
+                contentDescription = "kotlin",
                 modifier = Modifier
-                    .background(
-                        Color(0xCCCB8FFA),
-                        shape = RoundedCornerShape(100.dp)
-                    )
-                    .padding(16.dp)
+                    .size(width = 500.dp, height = 250.dp)
+                    .padding(end = 8.dp)
             )
 
-            Spacer(modifier = Modifier.width(30.dp))
-
+            Text(
+                text = "Tämä projekti koostuu useasta erilaisesta tehtävästä, jotka olivat osaa Mobiiliohjelmointi -kurssikokonaisuutta. " +
+                        "Tehtävät avautuvat valikosta.",
+                color = Color.Black,
+                textAlign = TextAlign.Center,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(16.dp)
+            )
+            Text(
+                text = "This project was carried out using finnish as the main language, " +
+                        "which is why the comments, variables and the overall execution of the app is mainly in finnish. " +
+                        "At some point I shall do the proper language versions.",
+                color = Color.Black,
+                textAlign = TextAlign.Center,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier
+                    .padding(16.dp)
+            )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(16.dp)
@@ -93,6 +99,7 @@ fun Home()
                             .size(32.dp)
                             .padding(end = 8.dp)
                     )
+
                     Text(
                         text = "maijakuu (2026)",
                         color = Color.Black,
@@ -100,6 +107,7 @@ fun Home()
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         fontStyle = FontStyle.Italic,
+                        textDecoration = TextDecoration.Underline,
                         modifier = Modifier
                             .padding(16.dp)
                             .clickable {
@@ -111,16 +119,6 @@ fun Home()
                             }
                     )
                 }
-
-            Text(
-                text = "Tämä projekti koostuu useammasta erilaisesta tehtävästä, jotka olivat osaa Mobiiliohjelmointi -kurssikokonaisuutta. Tehtävät avautuvat valikosta.",
-                color = Color.Black,
-                textAlign = TextAlign.Center,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .padding(16.dp)
-            )
         }
     }
 }
