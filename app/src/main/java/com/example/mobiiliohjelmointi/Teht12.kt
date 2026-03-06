@@ -37,19 +37,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
+
+/*====================VIEWMODEL DATAN SÄILYTYKSEEN====================================*/
+//ViewModel säilyttää ja muokkaa dataa erillään UI:sta.
+//Jos käytetään remember:ia, data säilyy vain niin kauan kuin itse @Composable.
+//Eli tässä tapauksessa aina kun siirryttiin 12a --> 12b --> 12c, niin data katosi.
 data class plista(val paivat: String, val korvaus: Float)
 data class kmlista(val kilometrit: Float)
+class kululaskuriViewModel : ViewModel(){
+    var paivarahalista by mutableStateOf<List<plista>>(emptyList())//Alustettu lista
+    var kmkorvauslista by mutableStateOf<List<kmlista>>(emptyList())//Alustettu lista
 
-class kululaskuriViewModel : ViewModel()
-{
-    var paivarahalista by mutableStateOf<List<plista>>(emptyList())
-    var kmkorvauslista by mutableStateOf<List<kmlista>>(emptyList())
-
-    fun plistataytto(paivat: String, korvaus: Float)
+    fun plistataytto(paivat: String, korvaus: Float)//Listan täyttö UI:sta saatavilla inputeilla
     {
         paivarahalista = paivarahalista + plista(paivat, korvaus)
     }
-    fun kmlistataytto(kilometrit: Float)
+    fun kmlistataytto(kilometrit: Float)//Listan täyttö UI:sta saatavilla inputeilla
     {
         kmkorvauslista = kmkorvauslista + kmlista(kilometrit)
     }
@@ -58,13 +61,15 @@ class kululaskuriViewModel : ViewModel()
         kmkorvauslista = emptyList()
     }
 }
+/*======================================================================================*/
 
-
+//===================ALOITUSNÄYTTÖ=======================//
 @Composable
-fun Teht12a(navController: NavHostController) {
-    var expanded by remember { mutableStateOf(false) }
-    var selectedItem by remember { mutableStateOf("Valitse kulut") }
-    val menuItems = listOf("Päivärahat", "Matkakulut")
+fun Teht12a(navController: NavHostController) //Navcontroller ja navhost controller oltava navigoitaessa
+{
+    var expanded by remember { mutableStateOf(false) }  //Alasvetovalikkoa varten
+    var selectedItem by remember { mutableStateOf("Valitse kulut") } //Alasvetovalikon valittu item
+    val menuItems = listOf("Päivärahat", "Matkakulut") //lista valikkoitemeista
 
 
     Column(
@@ -117,10 +122,10 @@ fun Teht12a(navController: NavHostController) {
         Row() {
             Button(
                 onClick = {
-                    if (selectedItem == "Päivärahat")
-                        { navController.navigate("Teht12b") }
-                    else if (selectedItem == "Matkakulut")
-                        { navController.navigate("Teht12c") }
+                    if (selectedItem == "Päivärahat")       //Jos listan valittu item ....
+                        { navController.navigate("Teht12b") } //...mennään tänne.
+                    else if (selectedItem == "Matkakulut")  //Jos listan valittu item ....
+                        { navController.navigate("Teht12c") }//...niin sitten mennään tänne.
                 },
                 modifier = Modifier
                     .padding(5.dp),
@@ -138,7 +143,7 @@ fun Teht12a(navController: NavHostController) {
         Row() {
             Button(
                 onClick = {
-                    navController.navigate("Teht12d")
+                    navController.navigate("Teht12d")//Yhteenvetosivu
                 },
                 modifier = Modifier
                     .padding(5.dp),
@@ -155,8 +160,10 @@ fun Teht12a(navController: NavHostController) {
         }
     }
 }
+
+//===================2. NÄYTTÖ=======================//
 @Composable
-fun Teht12b(navController: NavHostController, vm: kululaskuriViewModel)
+fun Teht12b(navController: NavHostController, vm: kululaskuriViewModel) //Käytetään navigaatiota ja ViewModelia
 {
     var paivat by remember { mutableStateOf("")}
     var korvaus by remember { mutableStateOf("")}
@@ -192,8 +199,8 @@ fun Teht12b(navController: NavHostController, vm: kululaskuriViewModel)
         ) {
             Row() {
                 Button(onClick ={
-                    vm.plistataytto(paivat, korvaus.toFloatOrNull()?: 0f)
-                    navController.popBackStack()
+                    vm.plistataytto(paivat, korvaus.toFloatOrNull()?: 0f) //Käytetään ViewModelia, täytetään listaa UI:n ulkopuolella
+                    navController.popBackStack() //Poistaa nykyisen näytön navigaatiostackin päältä ja menee edelliseen näkymään (12a)
                 },
                     modifier = Modifier
                         .padding(20.dp),
@@ -212,8 +219,10 @@ fun Teht12b(navController: NavHostController, vm: kululaskuriViewModel)
         }
     }
 }
+
+//===================3. NÄYTTÖ=======================//
 @Composable
-fun Teht12c(navController: NavHostController, vm: kululaskuriViewModel)
+fun Teht12c(navController: NavHostController, vm: kululaskuriViewModel)//Käytetään navigaatiota ja ViewModelia
 {
     var kilometrit by remember { mutableStateOf("")}
 
@@ -243,7 +252,7 @@ fun Teht12c(navController: NavHostController, vm: kululaskuriViewModel)
             Row() {
                 Button(onClick ={
                     vm.kmlistataytto(kilometrit.toFloatOrNull()?:0f)
-                    navController.popBackStack()
+                    navController.popBackStack() //Poistaa nykyisen näytön navigaatiostackin päältä ja menee edelliseen näkymään (12a)
                 },
                     modifier = Modifier
                         .padding(20.dp),
@@ -263,15 +272,19 @@ fun Teht12c(navController: NavHostController, vm: kululaskuriViewModel)
     }
 }
 
+//===================YHTEENVETO=======================//
 @Composable
-fun Teht12d(navController: NavHostController, vm: kululaskuriViewModel)
-{
+fun Teht12d(navController: NavHostController, vm: kululaskuriViewModel) {
+
+    /*=======================SAATUJEN ARVOJEN PROSESSOINTI========================*/
     val paivarahat = vm.paivarahalista.sumOf {
-        (it.paivat.toFloatOrNull() ?: 0f) * it.korvaus.toDouble()}.toFloat()
+        (it.paivat.toFloatOrNull() ?: 0f) * it.korvaus.toDouble()
+    }.toFloat()
     val kilometrikorvaus = vm.kmkorvauslista.sumOf {
         it.kilometrit.toDouble() * 0.5
     }.toFloat()
     val yhteensa = paivarahat + kilometrikorvaus
+    /*=============================================================================*/
 
     Column(
         modifier = Modifier
@@ -280,7 +293,7 @@ fun Teht12d(navController: NavHostController, vm: kululaskuriViewModel)
         verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Header
+
         Text(text = "Yhteenveto kuluista", fontSize = 40.sp)
 
         Box(
@@ -288,61 +301,64 @@ fun Teht12d(navController: NavHostController, vm: kululaskuriViewModel)
                 .background(Color.LightGray)
                 .padding(10.dp)
         ) {
-            Text(text = "Päivärahat: $paivarahat €", fontSize = 24.sp) // add score inside if needed
-        }
-        Box(
-            modifier = Modifier
-                .background(Color.LightGray)
-                .padding(10.dp)
-        ) {
-            Text(
-                text = "Kilometrikorvaukset: $kilometrikorvaus €",
-                fontSize = 24.sp
-            ) // add score inside if needed
-        }
-        Box(
-            modifier = Modifier
-                .background(Color.Green)
-                .padding(10.dp)
-        ) {
-            Text(text = "Yhteensä: $yhteensa €", fontSize = 24.sp) // add score inside if needed
-        }
-
-        Button(
-            onClick = {
-                navController.navigate("Tehtävä 3.2")
-                {popUpTo("Tehtävä 3.2") { inclusive = true }}
-            },
-            modifier = Modifier
-                .padding(20.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow)
-        )
-        {
-            Text(
-                text = "Jatka",
-                fontSize = 20.sp,
-                textAlign = TextAlign.Center,
-                color = Color.Black,
+            Text(text = "Päivärahat: $paivarahat €", fontSize = 24.sp)
+            Box(
                 modifier = Modifier
-                    .padding(5.dp)
+                    .background(Color.LightGray)
+                    .padding(10.dp)
+            ) {
+                Text(
+                    text = "Kilometrikorvaukset: $kilometrikorvaus €",
+                    fontSize = 24.sp
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .background(Color.Green)
+                    .padding(10.dp)
+            ) {
+                Text(text = "Yhteensä: $yhteensa €", fontSize = 24.sp)
+            }
+
+            Button(
+                onClick = {
+                    navController.navigate("Tehtävä 3.2")   //Palataan takaisin 12a
+                    {
+                        popUpTo("Tehtävä 3.2")  //Poista kaikki backstackista
+                        { inclusive = true }
+                    }           //Poista myös kohde itse, jotta saaadaan kokonaan alustettu stack.
+                },
+                modifier = Modifier
+                    .padding(20.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow)
             )
-        }
-        Button(
-            onClick = {
-                vm.nollaa()
-                navController.navigate("Tehtävä 3.2")
-                {popUpTo("Tehtävä 3.2") { inclusive = true }}
-            },
-            modifier = Modifier.padding(20.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow)
-        ) {
-            Text(
-                text = "Aloita alusta",
-                fontSize = 20.sp,
-                textAlign = TextAlign.Center,
-                color = Color.Black,
-                modifier = Modifier.padding(5.dp)
-            )
+            {
+                Text(
+                    text = "Jatka",
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .padding(5.dp)
+                )
+            }
+            Button(
+                onClick = {
+                    vm.nollaa()
+                    navController.navigate("Tehtävä 3.2")
+                    { popUpTo("Tehtävä 3.2") { inclusive = true } }
+                },
+                modifier = Modifier.padding(20.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow)
+            ) {
+                Text(
+                    text = "Aloita alusta",
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center,
+                    color = Color.Black,
+                    modifier = Modifier.padding(5.dp)
+                )
+            }
         }
     }
 }
